@@ -26,7 +26,6 @@ public class aims {
         user_01_cart.removeDigitalVideoDisc(dvd_02);
         System.out.println(user_01_cart.totalCost());
 
-        
 	}
 
 }
