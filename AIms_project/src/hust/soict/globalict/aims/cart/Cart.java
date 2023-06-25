@@ -1,34 +1,46 @@
 package hust.soict.globalict.aims.cart;
-
-
 import java.util.ArrayList;
+
+import javax.naming.LimitExceededException;
+
 import hust.soict.globalict.aims.media.Media;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Cart {
 	public static final int MAX_NUMBERS_ORDER =20;
-	private	ArrayList<Media> itemsOrdered = new ArrayList<Media>() ;
+	private	ObservableList<Media> itemsOrdered = FXCollections.observableArrayList() ;
 	private int qtyOrdered=0;
 	
 	public int getNum_of_items() {
 		return qtyOrdered;
 	}
 	
-	public void addMedia(Media media) {
-		if (qtyOrdered<	20)
+	public void addMedia(Media media) throws LimitExceededException {
+		if (qtyOrdered<	MAX_NUMBERS_ORDER) {
 			itemsOrdered.add(media);
 			qtyOrdered+=1;
-		}
-	
-	public void addMedia(Media... args) {
-		for (Media media:args) {
-			if (qtyOrdered<20) {
-				itemsOrdered.add(media);
-				qtyOrdered+=1;
-			}else {
-				break;
-			}
+		}else {
+			throw new LimitExceededException("ERROR: The number of media has reached its limit");	
 		}
 	}
+	
+//	public void addDigitalVideoDisc(DigitalVideoDisc [] dvdList) {
+//		for (DigitalVideoDisc dvd:dvdList) {
+//			this.addDigitalVideoDisc(dvd);
+//		}
+//	}
+	//
+//	public void addMedia(Media... args) {
+//		for (Media media:args) {
+//			if (qtyOrdered<20) {
+//				itemsOrdered.add(media);
+//				qtyOrdered+=1;
+//			}else {
+//				break;
+//			}
+//		}
+//	}
 	
 	public void removeMedia(Media media) {
 		if (itemsOrdered.contains(media)) {
@@ -76,10 +88,10 @@ public class Cart {
 		return null;
 	}
 
-	public ArrayList<Media> getItemsOrdered() {
+	public ObservableList<Media> getItemsOrdered() {
 		return itemsOrdered;
 	}
 	public void empty() {
-		this.itemsOrdered = new ArrayList<Media>();
+		this.itemsOrdered.remove(0,this.getNum_of_items());
 	}
 }

@@ -1,20 +1,18 @@
 package hust.soict.globalict.aims;
-
-
 import java.util.Collections;
 import java.util.Scanner;
 
-import hust.soict.globalict.aims.store.Store;
-import hust.soict.globalict.aims.cart.Cart;
-import hust.soict.globalict.aims.media.*;
+import javax.naming.LimitExceededException;
 
+import hust.soict.globalict.aims.cart.Cart;
+import hust.soict.globalict.aims.exception.PlayerException;
+import hust.soict.globalict.aims.media.*;
+import hust.soict.globalict.aims.store.Store;
 
 public class Aims {
 	static Scanner input = new Scanner(System.in);
-	static Store store = new Store();
 	static Cart cart = new Cart();
-	
-	
+	static Store store = new Store();
 	public static void main(String[] args) {
 
 		
@@ -24,7 +22,7 @@ public class Aims {
 		DigitalVideoDisc dvd2= new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 87, 24.95f);
 //		cart.addMedia(dvd2);
 		
-		DigitalVideoDisc dvd3= new DigitalVideoDisc("Aladin", "Animation","LanAnh",90, 18.99f);
+		DigitalVideoDisc dvd3= new DigitalVideoDisc("Aladin", "Animation","GiangHoang",90, 18.99f);
 //		cart.addMedia(dvd3);
 		
 		CompactDisc cd1 = new CompactDisc("99%", "Music", "MCK", "MCK", 65, 3.5f);
@@ -94,8 +92,12 @@ public class Aims {
 			String title2=input.nextLine();
 			Media found2 = store.search(title2);
 			if (found2!=null) {
-				cart.addMedia(found2);
-				System.out.println("Number of items in cart: "+cart.getNum_of_items());
+				try {
+					cart.addMedia(found2);
+					System.out.println("Number of items in cart: "+cart.getNum_of_items());
+				}catch(LimitExceededException e) {
+					e.printStackTrace();
+				}
 			}
 			storeMenu();
 			break;
@@ -106,7 +108,11 @@ public class Aims {
 			if (found3!=null) {
 				if (found3 instanceof Playable) {
 					Playable f = (Playable) found3;
-					f.play();
+					try {
+						f.play();
+					} catch (PlayerException e) {
+						e.printStackTrace();
+					}
 				}else {
 					System.out.println("Can not play this kind of media!");
 				}
@@ -138,7 +144,12 @@ public class Aims {
 		String option = input.nextLine();
 		switch (option) {
 		case "1":
-			cart.addMedia(media);
+			try {
+				cart.addMedia(media);
+			} catch (LimitExceededException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Number of items in cart: "+cart.getNum_of_items());
 			mediaDetailsMenu();
 			mediaDetailsMenu(media);
@@ -146,7 +157,12 @@ public class Aims {
 		case "2":
 			if (media instanceof Playable) {
 				Playable f = (Playable) media;
-				f.play();
+				try {
+					f.play();
+				} catch (PlayerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}else {
 				System.out.println("Can not play this kind of media!");
 			}
@@ -196,7 +212,12 @@ public class Aims {
 			if (found3!=null) {
 				if (found3 instanceof Playable) {
 					Playable f = (Playable) found3;
-					f.play();
+					try {
+						f.play();
+					} catch (PlayerException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else {
 					System.out.println("Can not play this kind of media!");
 				}
